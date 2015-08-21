@@ -1,16 +1,25 @@
 'use strict';
 
-function muHtml(html) {
-  return function(selector) {
-    [].forEach.call(document.querySelectorAll(selector), function(el) {
-      el.innerHtml = html;
-    });
+function mutator(fn, $) {
+  return function() {
+    var props = Array.prototype.slice.call(arguments);
+    return function(selector) {
+      selector = $ ? $(selector) : selector;
+      fn.apply(selector, [selector].concat(props));
+    };
   };
 }
 
+var muHtml = mutator(function(selector, html) {
+  [].forEach.call(document.querySelectorAll(selector), function(el) {
+    el.innerHtml = html;
+  });
+});
+
 function applyTransform(selector, value) {
   switch (typeof value) {
-    case 'string': {
+    case 'string':
+    case 'number': {
       muHtml(value)(selector);
       break;
     }
@@ -55,6 +64,6 @@ function transformTree() {
   }
 }
 
-module.exports = transformTree;
-
+module.exports = exports = transformTree;
 exports.html = muHtml;
+exports.mutator = mutator;

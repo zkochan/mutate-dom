@@ -27,31 +27,21 @@ The code that mutates the HTML.
 
 ```js
 var mu = require('mutate-dom');
+var mutator = require('mutate-dom').mutator;
 
-function toJQuery(fn) {
-  return function(selector) {
-    var $el = $(selector);
-    return fn($el);
-  };
-}
+mu.addClass = mutator(function($el, newClass) {
+  $el.addClass(newClass);
+}, $);
 
-mu.addClass = function(newClass) {
-  return toJQuery(function($el) {
-    $el.addClass(newClass);
-  });
-};
-
-mu.src = function(src) {
-  return toJQuery(function($el) {
-    $el.attr('src', src);
-  });
-};
+mu.src = mutator(function($el, src) {
+  $el.attr('src', src);
+}, $);
 
 mu({
   '.user': {
     '.name': 'Bill',
     '.ava-container': [{
-        'img': mu.src('http://api.randomuser.me/portraits/thumb/men/59.jpg')
+        img: mu.src('http://api.randomuser.me/portraits/thumb/men/59.jpg')
       },
       mu.addClass('awesome-ava-container')
     ]
