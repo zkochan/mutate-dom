@@ -1,0 +1,28 @@
+{
+  "name": "mutate-dom",
+  "version": "0.1.0",
+  "description": "DOM mutator for A/B experiments.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zkochan/mutate-dom.git"
+  },
+  "keywords": [
+    "ab",
+    "dom",
+    "mutate"
+  ],
+  "author": {
+    "name": "Zoltan Kochan",
+    "email": "zoltan.kochan@gmail.com",
+    "url": "http://kochan.io"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zkochan/mutate-dom/issues"
+  },
+  "homepage": "https://github.com/zkochan/mutate-dom#readme",
+  "publishConfig": {
+    "registry": "http://registry.npmjs.org"
+  }
+}
