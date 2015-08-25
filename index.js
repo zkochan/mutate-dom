@@ -25,7 +25,7 @@ function applyTransform(selector, value) {
     }
     case 'object': {
       if (value instanceof Array) {
-        for (var i = value.length; i--;) {
+        for (var i = 0, len = value.length; i < len; i++) {
           applyTransform(selector, value[i]);
         }
       } else {
@@ -59,7 +59,7 @@ function transformTree() {
   }
   for (var key in tree) {
     var value = tree[key];
-    var selector = [parent, key].join(' ');
+    var selector = parent ? [parent, key].join(' ') : key;
     applyTransform(selector, value);
   }
 }
