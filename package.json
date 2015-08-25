@@ -29,7 +29,10 @@
     "registry": "http://registry.npmjs.org"
   },
   "devDependencies": {
+    "chai": "^3.2.0",
     "fosify-test": "^0.1.5",
-    "foso": "^0.9.6"
+    "foso": "^0.9.6",
+    "sinon": "^1.16.1",
+    "sinon-chai": "^2.8.0"
   }
 }

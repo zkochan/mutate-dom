@@ -1,6 +1,10 @@
 'use strict';
 
 var sinon = require('sinon');
+var chai = require('chai');
+var sinonChai = require('sinon-chai');
+var expect = chai.expect;
+chai.use(sinonChai);
 var mu = require('../');
 var mutator = require('../').mutator;
 
@@ -12,7 +16,7 @@ describe('mutate-dom', function() {
       var mutate = fooMutator(3, 1, 2);
       mutate('.bar');
 
-      expect(spy.calledWithExactly('.bar', 3, 1, 2)).to.be.true;
+      expect(spy).to.have.been.calledWithExactly('.bar', 3, 1, 2);
     });
 
     it('calls selector filter', function() {
@@ -24,8 +28,18 @@ describe('mutate-dom', function() {
       var mutate = fooMutator(3, 1, 2);
       mutate('.bar');
 
-      expect(spy.calledWithExactly('.bar++', 3, 1, 2)).to.be.true;
-      expect(filterSpy.calledWithExactly('.bar')).to.be.true;
+      expect(spy).to.have.been.calledWithExactly('.bar++', 3, 1, 2);
+      expect(filterSpy).to.have.been.calledWithExactly('.bar');
+    });
+
+    it('catches errors of the mutator', function() {
+      var errorMutaror = sinon.spy(mutator(function() {
+        throw new Error();
+      }));
+
+      errorMutaror()('.foo');
+      expect(errorMutaror.exceptions.length).to.eq(1);
+      expect(errorMutaror.exceptions[0]).to.be.undefined;
     });
   });
 
@@ -101,7 +115,7 @@ describe('mutate-dom', function() {
         }
       });
 
-      expect(spy.calledWithExactly('#bar .foo')).to.be.true;
+      expect(spy).to.have.been.calledWithExactly('#bar .foo');
     });
 
     it('calls several mutators in order', function() {
@@ -118,9 +132,9 @@ describe('mutate-dom', function() {
       });
 
 
-      sinon.assert.callOrder(mutator1, mutator2);
-      expect(mutator1.calledWithExactly('#bar .foo')).to.be.true;
-      expect(mutator2.calledWithExactly('#bar .foo')).to.be.true;
+      expect(mutator1).to.have.been.calledBefore(mutator2);
+      expect(mutator1).to.have.been.calledWithExactly('#bar .foo');
+      expect(mutator2).to.have.been.calledWithExactly('#bar .foo');
     });
   });
 });

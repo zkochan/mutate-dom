@@ -4,8 +4,12 @@ function mutator(fn, $) {
   return function() {
     var props = Array.prototype.slice.call(arguments);
     return function(selector) {
-      selector = $ ? $(selector) : selector;
-      fn.apply(selector, [selector].concat(props));
+      try {
+        selector = $ ? $(selector) : selector;
+        fn.apply(selector, [selector].concat(props));
+      } catch(err) {
+        console.log(err);
+      }
     };
   };
 }
