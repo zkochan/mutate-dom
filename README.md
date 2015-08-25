@@ -2,6 +2,10 @@
 
 DOM mutator for A/B experiments.
 
+[![Dependency Status](https://david-dm.org/zkochan/mutate-dom/status.svg?style=flat)](https://david-dm.org/zkochan/mutate-dom)
+[![Build Status](https://travis-ci.org/zkochan/mutate-dom.svg?branch=master)](https://travis-ci.org/zkochan/mutate-dom)
+[![npm version](https://badge.fury.io/js/mutate-dom.svg)](http://badge.fury.io/js/mutate-dom)
+
 
 # Installation
 

@@ -3,6 +3,9 @@
   "version": "0.2.0",
   "description": "DOM mutator for A/B experiments.",
   "main": "index.js",
+  "scripts": {
+    "test": "node fosofile"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/zkochan/mutate-dom.git"
@@ -24,5 +27,9 @@
   "homepage": "https://github.com/zkochan/mutate-dom#readme",
   "publishConfig": {
     "registry": "http://registry.npmjs.org"
+  },
+  "devDependencies": {
+    "fosify-test": "^0.1.5",
+    "foso": "^0.9.6"
   }
 }
