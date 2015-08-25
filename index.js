@@ -5,8 +5,10 @@ function mutator(fn, $) {
     var props = Array.prototype.slice.call(arguments);
     return function(selector) {
       try {
-        selector = $ ? $(selector) : selector;
-        fn.apply(selector, [selector].concat(props));
+        [].forEach.call(document.querySelectorAll(selector), function(el) {
+          el = $ ? $(el) : el;
+          fn.apply(el, [el].concat(props));
+        });
       } catch(err) {
         console.log(err);
       }
@@ -14,10 +16,8 @@ function mutator(fn, $) {
   };
 }
 
-var muHtml = mutator(function(selector, html) {
-  [].forEach.call(document.querySelectorAll(selector), function(el) {
-    el.innerHTML = html;
-  });
+var muHtml = mutator(function(el, html) {
+  el.innerHTML = html;
 });
 
 function applyTransform(selector, value) {
@@ -63,7 +63,7 @@ function transformTree() {
   }
   for (var key in tree) {
     var value = tree[key];
-    var selector = parent ? [parent, key].join(' ') : key;
+    var selector = parent ? parent + ' ' + key : key;
     applyTransform(selector, value);
   }
 }
