@@ -12,7 +12,7 @@ function mutator(fn, $) {
 
 var muHtml = mutator(function(selector, html) {
   [].forEach.call(document.querySelectorAll(selector), function(el) {
-    el.innerHtml = html;
+    el.innerHTML = html;
   });
 });
 
