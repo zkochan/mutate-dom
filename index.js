@@ -6,25 +6,25 @@ var muHtml = mutator(function(el, html) {
   el.innerHTML = html;
 });
 
-function applyTransform(selector, value) {
+function applyTransform(elements, value) {
   switch (typeof value) {
     case 'string':
     case 'number': {
-      muHtml(value)(selector);
+      muHtml(value)(elements);
       break;
     }
     case 'object': {
       if (value instanceof Array) {
         for (var i = 0, len = value.length; i < len; i++) {
-          applyTransform(selector, value[i]);
+          applyTransform(elements, value[i]);
         }
       } else {
-        transformTree(selector, value);
+        transformTree(elements, value);
       }
       break;
     }
     case 'function': {
-      value(selector);
+      value(elements);
       break;
     }
     default: {
@@ -34,26 +34,55 @@ function applyTransform(selector, value) {
   }
 }
 
+function find(parents, selector) {
+  var result = [];
+  [].forEach.call(parents, function(parent) {
+    try {
+      var children = Array.prototype.slice.call(parent.querySelectorAll(selector));
+      result = result.concat(children);
+    } catch(err) {
+      console.log(err);
+    }
+  });
+  return result;
+}
+
 /**
  * @param {String} [parent] - Parent selector.
  * @param {Object} tree - An object describing the DOM tree.
  */
 function transformTree() {
-  var tree, parent;
+  var tree, parents;
   if (arguments.length === 2) {
-    parent = arguments[0];
+    parents = arguments[0];
     tree = arguments[1];
   } else if (arguments.length === 1) {
-    parent = '';
+    parents = [document];
     tree = arguments[0];
   }
   for (var key in tree) {
     var value = tree[key];
-    var selector = parent ? parent + ' ' + key : key;
-    applyTransform(selector, value);
+    var elements = find(parents, key);
+    applyTransform(elements, value);
   }
+}
+
+function slice() {
+  var start, end, value;
+  start = arguments[0];
+  if (arguments.length === 3) {
+    end = arguments[1];
+    value = arguments[2];
+  } else {
+    end = undefined;
+    value = arguments[1];
+  }
+  return function(elements) {
+    applyTransform(elements.slice(start, end), value);
+  };
 }
 
 module.exports = exports = transformTree;
 exports.html = muHtml;
 exports.mutator = mutator;
+exports.slice = slice;

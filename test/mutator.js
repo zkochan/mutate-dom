@@ -12,34 +12,13 @@ describe('mutate-dom', function() {
     it('passes correct set of arguments', function() {
       var el = document.createElement('div');
       el.className = 'bar';
-      document.body.appendChild(el);
 
       var spy = sinon.spy();
       var fooMutator = mutator(spy);
       var mutate = fooMutator(3, 1, 2);
-      mutate('.bar');
+      mutate([el]);
 
       expect(spy).to.have.been.calledWithExactly(el, 3, 1, 2);
-      el.parentNode.removeChild(el);
-    });
-
-    it('calls selector filter', function() {
-      var el = document.createElement('div');
-      el.className = 'bar';
-      document.body.appendChild(el);
-
-      var spy = sinon.spy();
-      var filterSpy = sinon.spy(function(selector) {
-        return '++';
-      });
-      var fooMutator = mutator(spy, filterSpy);
-      var mutate = fooMutator(3, 1, 2);
-      mutate('.bar');
-
-      expect(spy).to.have.been.calledWithExactly('++', 3, 1, 2);
-      expect(filterSpy).to.have.been.calledWithExactly(el);
-
-      el.parentNode.removeChild(el);
     });
 
     it('catches errors of the mutator', function() {
@@ -47,7 +26,7 @@ describe('mutate-dom', function() {
         throw new Error();
       }));
 
-      errorMutaror()('.foo');
+      errorMutaror()(['.foo']);
       expect(errorMutaror.exceptions.length).to.eq(1);
       expect(errorMutaror.exceptions[0]).to.be.undefined;
     });

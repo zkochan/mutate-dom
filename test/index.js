@@ -72,6 +72,13 @@ describe('mutate-dom', function() {
     });
 
     it('calls mutator', function() {
+      var containerEl = document.createElement('div');
+      containerEl.id = 'bar';
+      var el = document.createElement('span');
+      el.className = 'foo';
+      containerEl.appendChild(el);
+      document.body.appendChild(containerEl);
+
       var spy = sinon.spy();
 
       mu({
@@ -80,10 +87,18 @@ describe('mutate-dom', function() {
         }
       });
 
-      expect(spy).to.have.been.calledWithExactly('#bar .foo');
+      expect(spy).to.have.been.calledWithExactly([el]);
+      containerEl.parentNode.removeChild(containerEl);
     });
 
     it('calls several mutators in order', function() {
+      var containerEl = document.createElement('div');
+      containerEl.id = 'bar';
+      var el = document.createElement('span');
+      el.className = 'foo';
+      containerEl.appendChild(el);
+      document.body.appendChild(containerEl);
+
       var mutator1 = sinon.spy();
       var mutator2 = sinon.spy();
 
@@ -96,10 +111,40 @@ describe('mutate-dom', function() {
         }
       });
 
-
       expect(mutator1).to.have.been.calledBefore(mutator2);
-      expect(mutator1).to.have.been.calledWithExactly('#bar .foo');
-      expect(mutator2).to.have.been.calledWithExactly('#bar .foo');
+      expect(mutator1).to.have.been.calledWithExactly([el]);
+      expect(mutator2).to.have.been.calledWithExactly([el]);
+      containerEl.parentNode.removeChild(containerEl);
+    });
+
+    it('catches errors of the DOM crawler', function() {
+      expect(function() {
+        mu({
+          '*=+-%': 'foo'
+        });
+      }).to.not.throw();
+    });
+  });
+
+  describe('slice', function() {
+    it('works', function() {
+      var el1 = document.createElement('div');
+      el1.className = 'foo';
+      el1.innerHTML = 'qaz';
+      document.body.appendChild(el1);
+      var el2 = document.createElement('div');
+      el2.className = 'foo';
+      el2.innerHTML = 'qaz';
+      document.body.appendChild(el2);
+
+      mu({
+        '.foo': mu.slice(0, 1, 'bar')
+      });
+
+      expect(el1.innerHTML).to.eq('bar');
+      expect(el2.innerHTML).to.eq('qaz');
+      el1.parentNode.removeChild(el1);
+      el2.parentNode.removeChild(el2);
     });
   });
 });

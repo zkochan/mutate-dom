@@ -33,17 +33,18 @@ The code that mutates the HTML.
 var mu = require('mutate-dom');
 var mutator = require('mutate-dom').mutator;
 
-mu.addClass = mutator(function($el, newClass) {
-  $el.addClass(newClass);
-}, $);
+mu.addClass = mutator(function(el, newClass) {
+  $(el).addClass(newClass);
+});
 
-mu.src = mutator(function($el, src) {
-  $el.attr('src', src);
-}, $);
+mu.src = mutator(function(el, src) {
+  $(el).attr('src', src);
+});
 
 mu({
   '.user': {
     '.name': 'Bill',
+    '.hobbies': mu.slice(0, 1, 'football'),
     '.ava-container': [{
         img: mu.src('http://api.randomuser.me/portraits/thumb/men/59.jpg')
       },
