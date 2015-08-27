@@ -126,6 +126,24 @@ describe('mutate-dom', function() {
     });
   });
 
+  describe('filter', function() {
+    it('works', function() {
+      var el = document.createElement('div');
+      el.className = 'qar';
+      document.body.appendChild(el);
+
+      var spy = sinon.spy(function() {
+        return [document.body];
+      });
+      var filter = mu.filter(spy);
+      filter('foo', 'bar', {'.qar': 'some-content'})([1, 2, 3]);
+
+      expect(spy).to.have.been.calledWithExactly([1, 2, 3], 'foo', 'bar');
+      expect(el.innerHTML).to.eq('some-content');
+      el.parentNode.removeChild(el);
+    });
+  });
+
   describe('slice', function() {
     it('works', function() {
       var el1 = document.createElement('div');

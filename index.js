@@ -67,22 +67,23 @@ function transformTree() {
   }
 }
 
-function slice() {
-  var start, end, value;
-  start = arguments[0];
-  if (arguments.length === 3) {
-    end = arguments[1];
-    value = arguments[2];
-  } else {
-    end = undefined;
-    value = arguments[1];
-  }
-  return function(elements) {
-    applyTransform(elements.slice(start, end), value);
+function filter(fn) {
+  return function() {
+    var args = Array.prototype.slice.call(arguments, 0, -1);
+    var value = arguments[arguments.length - 1];
+    return function(elements) {
+      var filteredElements = fn.apply(null, [elements].concat(args));
+      applyTransform(filteredElements, value);
+    };
   };
 }
+
+var slice = filter(function(elements, start, end) {
+  return elements.slice(start, end);
+});
 
 module.exports = exports = transformTree;
 exports.html = muHtml;
 exports.mutator = mutator;
+exports.filter = filter;
 exports.slice = slice;
