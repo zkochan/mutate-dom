@@ -1,5 +1,6 @@
 'use strict';
 
+var forEach = require('array-foreach');
 var mutator = require('./lib/mutator');
 
 var muHtml = mutator(function(el, html) {
@@ -36,7 +37,7 @@ function applyTransform(elements, value) {
 
 function find(parents, selector) {
   var result = [];
-  [].forEach.call(parents, function(parent) {
+  forEach(parents, function(parent) {
     try {
       var children = Array.prototype.slice.call(parent.querySelectorAll(selector));
       result = result.concat(children);
